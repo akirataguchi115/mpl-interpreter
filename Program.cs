@@ -17,32 +17,61 @@
             }
             return literal;
         }
-        static void Main(string[] args)
+
+        static List<List<String>> Scanner(string source)
         {
-            Console.WriteLine("Hello, Mini-PL!");
-            string source = System.IO.File.ReadAllText(args[0]);
             List<List<String>> tokens = new List<List<String>>();
-            tokens.Add(new List<string>());
-            int line = 0;
             int index = 0;
+            int tokenIndex = 0;
             string token = "";
             while (index != source.Length)
             {
                 if (source[index] == char.Parse(" "))
                 {
-                    tokens[line].Add(token);
+                    tokens.Add(new List<string>());
+                    string type = "";
+                    switch (token)
+                    {
+                        case "int":
+                            type = "type";
+                            break;
+                        case "string":
+                            type = "type";
+                            break;
+                        case "bool":
+                            type = "type";
+                            break;
+                        default:
+                            type = "null";
+                            break;
+                    }
+                    tokens[tokenIndex].Add(type);
+                    tokens[tokenIndex].Add(token);
                     token = "";
+                    tokenIndex++;
+                    index++;
+                } else {
+                    token += source[index];
                     index++;
                 }
-                token += source[index];
-                index++;
             }
-            tokens[line].Add(token);
             Console.WriteLine("Parsed tokens");
-            foreach (var parsedToken in tokens[0])
+            Console.Write("{");
+            foreach (var parsedToken in tokens)
             {
-                Console.WriteLine(parsedToken);
+                Console.Write("{");
+                Console.Write(parsedToken[0] + ", " + parsedToken[1]);
+                Console.Write("}");
             }
+            Console.Write("}");
+            Console.WriteLine();
+            return tokens;
+        }
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello, Mini-PL!");
+            string source = System.IO.File.ReadAllText(args[0]);
+            List<List<String>> tokens = Scanner(source);
         }
     }
 }
