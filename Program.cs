@@ -1,21 +1,44 @@
-﻿namespace HelloWorld
+﻿namespace MPLInterpreter
 {
   class Program
   {
 
-	static string ScanString(string literal)
+	static Tuple<string?, int> ScanString(string literal)
 	{
+		string lexeme = "";
 	  int index = 0;
-	  while (index < literal.Length)
+	  if (literal[index] != Char.Parse("\"")) return new Tuple<string?, int> (null, index);
+		index++;
+	  while (true)
 	  {
-		Console.WriteLine(literal[index]);
-		if (literal[index].Equals('\\'))
+		char ch = literal[index];
+		if (ch.Equals('\\'))
 		{
-		  return "found escape character!";
+			index++;
+			switch (literal[index])
+			{
+				case 'n':
+					lexeme += 'n';
+					break;
+				case 't':
+					lexeme += 't';
+					break;
+				default:
+					lexeme += literal[index];
+					break;
+			} 
+		} else if (ch.Equals('\"'))
+		{
+			return new Tuple<string?, int>(lexeme, index);
+		} else if (ch.Equals('\n'))
+		{
+			return  new Tuple<string?, int>(null, ++index);
+		} else
+		{
+			lexeme += ch;
 		}
 		index++;
 	  }
-	  return literal;
 	}
 
 	static List<List<String>> Scanner(string source)
@@ -26,7 +49,24 @@
 	  string token = "";
 	  while (index != source.Length)
 	  {
-		if (source[index] == char.Parse(" "))
+		if (source[index] == '\"')
+		{
+			Tuple<string?, int> scannedToken = ScanString(source.Substring(index));
+			if (scannedToken.Item1 == null)
+			{
+				token = "error";
+				index += scannedToken.Item2 + 1;
+			}
+			else
+			{
+				token = "string";
+				index += scannedToken.Item2 + 1;
+			}
+		}
+		else if (source[index] == char.Parse(" ")
+			|| source[index] == char.Parse("\n")
+			|| index == source.Length - 1
+			|| source[index] == char.Parse(";"))
 		{
 		  tokens.Add(new List<string>());
 		  string type = "";
@@ -41,8 +81,26 @@
 			case "bool":
 			  type = "type";
 			  break;
-			default:
+			case "var":
 			  type = "null";
+			  break;
+			case ":":
+			  type = "null";
+			  break;
+			case ":=":
+			  type = "null";
+			  break;
+			case "-":
+			  type = "null";
+			  break;
+			case ";":
+			  type = "null";
+			  break;
+			case "error":
+				type = "error";
+				break;
+			default:
+			  type = "ident";
 			  break;
 		  }
 		  tokens[tokenIndex].Add(type);
@@ -63,7 +121,7 @@
 	  {
 		Console.Write("{");
 		Console.Write(parsedToken[0] + ", " + parsedToken[1]);
-		Console.Write("}");
+		if (index == source.Length) Console.Write("}"); else Console.Write("}, ");
 	  }
 	  Console.Write("}");
 	  Console.WriteLine();
@@ -71,7 +129,6 @@
 	}
 	static void Main(string[] args)
 	{
-	  Console.WriteLine("Hello, Mini-PL!");
 	  string source = System.IO.File.ReadAllText(args[0]);
 	  List<List<String>> tokens = Scanner(source);
 	}
