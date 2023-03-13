@@ -1,7 +1,7 @@
 namespace MPLInterpreter
 {
 
-  class Scanner
+  public class Scanner
   {
 	List<List<String>> tokens = new List<List<String>>();
 	private string source;
@@ -54,7 +54,7 @@ namespace MPLInterpreter
 	  }
 	}
 
-	List<List<String>> Scan(string source)
+	public List<List<String>> Scan(string source)
 	{
 	  int index = 0;
 	  int tokenIndex = 0;
