@@ -64,7 +64,46 @@ Regular expression for recognizing error tokens:
 
 ## CFG
 
+EBNF of the CGF eliminated from LL(1) violations (GPT-3 was used to construct this from the original EBNF):
+
+```
+Here's the LL(1) version of the EBNF:
+
+<prog> ::= <stmts> EOF
+<stmts> ::= <stmt> ";" <stmts'> 
+<stmts'> ::= <stmt> ";" <stmts'> | ε
+<stmt> ::= "var" <var_ident> ":" <type> <stmt''>
+| <var_ident> ":=" <expr>
+| "for" <var_ident> "in" <expr> ".." <expr> "do" <stmts> "end" "for"
+| "read" <var_ident>
+| "print" <expr>
+| "if" <expr> "do" <stmts> <stmt'>
+<stmt'> ::= "else" <stmts> "end" | "end"
+<stmt''> ::= ":=" <expr> | ε
+<expr> ::= <opnd> <op> <opnd>
+| <unary_opnd> <opnd'>
+<opnd'> ::= <op> <opnd> | ε
+<opnd> ::= <int>
+| <string>
+| <var_ident>
+| "(" <expr> ")"
+<type> ::= "int" | "string" | "bool"
+<var_ident> ::= <ident>
+<ident> ::= <letter> { <letter> | <digit> | "_" }
+<letter> ::= "a" | "b" | ... | "z" | "A" | "B" | ... | "Z"
+<digit> ::= "0" | "1" | ... | "9"
+<op> ::= "+" | "-" | "*" | "/" | "==" | "!=" | "<" | ">" | "<=" | ">="
+<unary_opnd> ::= "-" | "not"
+<reserved_keyword> ::= "var" | "for" | "end" | "in" | "do" | "read" | "print" | "int" | "string" | "bool" | "assert" | "if" | "else"
+EOF ::= "$"
+
+Note: "ε" represents an empty string or no production.
+```
+
 ## AST
+
+AST from the sample program 1:
+![](Pictures/ast1.png)
 
 ## Error handling
 
