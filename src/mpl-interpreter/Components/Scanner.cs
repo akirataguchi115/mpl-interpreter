@@ -3,7 +3,12 @@ namespace MPLInterpreter
 
   public class Scanner
   {
-	List<List<String>> tokens = new List<List<String>>();
+	private List<List<String>> _tokens = new List<List<String>>();
+	public List<List<String>> tokens
+	{
+		get => _tokens;
+		set => _tokens = value;
+	}
 	private string source;
 	public Scanner(string source)
 	{
@@ -80,7 +85,7 @@ namespace MPLInterpreter
 			|| index == source.Length - 1
 			|| source[index] == char.Parse(";"))
 		{
-		  tokens.Add(new List<string>());
+		  _tokens.Add(new List<string>());
 		  string type = "";
 		  switch (token)
 		  {
@@ -115,8 +120,8 @@ namespace MPLInterpreter
 			  type = "ident";
 			  break;
 		  }
-		  tokens[tokenIndex].Add(type);
-		  tokens[tokenIndex].Add(token);
+		  _tokens[tokenIndex].Add(type);
+		  _tokens[tokenIndex].Add(token);
 		  token = "";
 		  tokenIndex++;
 		  index++;
@@ -129,7 +134,7 @@ namespace MPLInterpreter
 	  }
 	  Console.WriteLine("Parsed tokens");
 	  Console.Write("{");
-	  foreach (var parsedToken in tokens)
+	  foreach (var parsedToken in _tokens)
 	  {
 		Console.Write("{");
 		Console.Write(parsedToken[0] + ", " + parsedToken[1]);
@@ -137,7 +142,7 @@ namespace MPLInterpreter
 	  }
 	  Console.Write("}");
 	  Console.WriteLine();
-	  return tokens;
+	  return _tokens;
 	}
   }
 }

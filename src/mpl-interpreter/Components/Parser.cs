@@ -2,16 +2,32 @@ namespace MPLInterpreter
 {
 	public class Node
 	{
-	  public Node? parent;
-	  public List<Node>? children;
-	  public Tuple<string, string>? token;
+	  private Node? _parent;
+		public Node? parent
+		{
+			get => _parent;
+			set => _parent = value;
+		}
+	  private List<Node>? _children;
+		public List<Node>? children
+		{
+			get => _children;
+			set => _children = value;
+		}
+	  private string? _token;
+		public string? token
+		{
+			get => _token;
+			set => _token = value;
+		}
+
+		public Node(string token)
+		{
+			this.token = token;
+		}
 	}
 
-	public struct Tree<Node>
-	{
-	  public Node n;
-	}
-  class Parser
+  public class Parser
   {
 		private Scanner scanner;
 		public Parser(Scanner scanner)
@@ -19,13 +35,10 @@ namespace MPLInterpreter
 			this.scanner = scanner;
 		}
 
-	public Tree<Node> CreateAST()
+	public Node makeAST()
 	{
-	  Tree<Node> tree = new Tree<Node>();
-	  while (true)
-	  {
-		return tree;
-	  }
+	  Node tree = new Node("program");
+	  return tree;
 	}
-  }
+	}
 }
