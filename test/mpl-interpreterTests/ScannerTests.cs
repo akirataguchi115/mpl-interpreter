@@ -1,5 +1,6 @@
 namespace MPLInterpreter;
 
+[Collection("Test")]
 public class ScannerTests
 {
 	[Fact]

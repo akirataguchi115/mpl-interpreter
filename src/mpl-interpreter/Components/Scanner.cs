@@ -9,6 +9,9 @@ namespace MPLInterpreter
 		get => _tokens;
 		set => _tokens = value;
 	}
+
+	private Boolean eof = false;
+	private int index = 0;
 	private string source;
 	public Scanner(string source)
 	{
@@ -17,6 +20,18 @@ namespace MPLInterpreter
 	public Tuple<string, string> GetString()
 	{
 	  return new Tuple<string, string>("", "");
+	}
+	public List<string> GetToken()
+	{
+		try
+		{
+			List<string> token = _tokens[index];
+			index++;
+			return token;
+		} catch (Exception)
+		{
+			return new List<string>{ "eol", "eol" };
+		}
 	}
 	static Tuple<string?, int> ScanString(string literal)
 	{
@@ -145,4 +160,5 @@ namespace MPLInterpreter
 	  return _tokens;
 	}
   }
+
 }

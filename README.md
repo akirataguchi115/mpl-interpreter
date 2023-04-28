@@ -67,8 +67,6 @@ Regular expression for recognizing error tokens:
 EBNF of the CGF eliminated from LL(1) violations (GPT-3 was used to construct this from the original EBNF):
 
 ```
-Here's the LL(1) version of the EBNF:
-
 <prog> ::= <stmts> EOF
 <stmts> ::= <stmt> ";" <stmts'> 
 <stmts'> ::= <stmt> ";" <stmts'> | ε
